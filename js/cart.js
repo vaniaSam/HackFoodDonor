@@ -1,47 +1,46 @@
-function renderCartPage() {
-    const cartHTML = `
-      <h2>Your Cart</h2>
-      <ul id="cart-list"></ul>
-      <button onclick="checkout()">Checkout</button>
-    `;
-    document.getElementById('app').innerHTML = cartHTML;
-  
-    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+// Function to display cart items
+function displayCartItems() {
     const cartList = document.getElementById('cart-list');
-    cartList.innerHTML = '';
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
   
-    cartItems.forEach((item) => {
+    cartList.innerHTML = ''; // Clear list
+  
+    cart.forEach(item => {
       const listItem = document.createElement('li');
-      listItem.textContent = `${item.foodName} - ${item.quantity} units`;
+      listItem.innerHTML = `
+        <span>${item.foodName} - Quantity: ${item.quantity}</span>
+        <button onclick="removeFromCart(${item.id})">Remove</button>
+      `;
       cartList.appendChild(listItem);
     });
   }
   
-  function checkout() {
-    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    let foodItems = JSON.parse(localStorage.getItem('foodItems')) || [];
+  // Function to remove an item from the cart
+  function removeFromCart(itemId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart = cart.filter(item => item.id !== itemId);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    displayCartItems();
+  }
   
-    // Update the food items based on the items in the cart
-    cartItems.forEach((cartItem) => {
-      const foodItem = foodItems.find(item => item.foodName === cartItem.foodName);
+  // Function to handle checkout
+  function checkout() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  
+    // Deduct items from food list quantities
+    cart.forEach(cartItem => {
+      const foodItem = foodItems.find(item => item.id === cartItem.id);
       if (foodItem) {
-        // Decrease the quantity of the food item based on cart quantity
         foodItem.quantity -= cartItem.quantity;
-        
-        // Remove the item from foodItems if quantity reaches zero
-        if (foodItem.quantity <= 0) {
-          foodItems = foodItems.filter(item => item.foodName !== cartItem.foodName);
-        }
+        if (foodItem.quantity < 0) foodItem.quantity = 0;
       }
     });
   
-    // Save the updated food list to localStorage
-    localStorage.setItem('foodItems', JSON.stringify(foodItems));
-  
-    // Clear the cart after checkout
-    localStorage.removeItem('cartItems');
-  
-    alert('Checkout successful! Food items have been reserved for you.');
-    navigateTo('/food-list');
+    localStorage.removeItem('cart'); // Clear the cart after checkout
+    alert('Checkout successful! Thank you for your order.');
+    displayCartItems(); // Refresh cart view
   }
+  
+  displayCartItems();
+  
   
