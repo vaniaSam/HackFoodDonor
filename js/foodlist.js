@@ -1,47 +1,51 @@
-function renderFoodListPage() {
-    const foodListHTML = `
-      <h2>Available Food Items</h2>
-      <ul id="food-list"></ul>
-      <button onclick="navigateTo('/cart')">Go to Cart</button>
-    `;
-    document.getElementById('app').innerHTML = foodListHTML;
+// Placeholder for available food items
+const foodItems = [
+    { id: 1, foodName: "Apples", quantity: 10, expirationDate: "2024-12-01" },
+    { id: 2, foodName: "Bananas", quantity: 5, expirationDate: "2024-11-20" },
+    // Add more items as needed
+  ];
   
-    // Load food items from localStorage
-    const foodItems = JSON.parse(localStorage.getItem('foodItems')) || [];
-  
-    // Display each item
+  // Function to display food items
+  function displayFoodItems() {
     const foodList = document.getElementById('food-list');
-    foodList.innerHTML = '';
-    foodItems.forEach((item, index) => {
+    foodList.innerHTML = ''; // Clear list
+  
+    foodItems.forEach(item => {
       const listItem = document.createElement('li');
-      listItem.textContent = `${item.foodName} - ${item.quantity} units - Expires: ${item.expirationDate}`;
-      
-      // Add a button to add this item to the cart
-      const addToCartButton = document.createElement('button');
-      addToCartButton.textContent = "Add to Cart";
-      addToCartButton.onclick = () => addToCart(item, index);
-      
-      listItem.appendChild(addToCartButton);
+      listItem.innerHTML = `
+        <span>${item.foodName} - Available: ${item.quantity} - Expires on: ${item.expirationDate}</span>
+        <input type="number" id="quantity-${item.id}" min="1" max="${item.quantity}" placeholder="Quantity">
+        <button onclick="addToCart(${item.id})">Add to Cart</button>
+      `;
       foodList.appendChild(listItem);
     });
   }
   
-  function addToCart(item, index) {
-    // Retrieve cart items from localStorage or initialize an empty array
-    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    
-    // Check if the item is already in the cart
-    const existingCartItem = cartItems.find(cartItem => cartItem.foodName === item.foodName);
-    
-    if (existingCartItem) {
-      // Increase the quantity if the item is already in the cart
-      existingCartItem.quantity += 1;
-    } else {
-      // Add the item to the cart with an initial quantity of 1
-      cartItems.push({ ...item, quantity: 1 });
+  // Function to add an item to the cart
+  function addToCart(itemId) {
+    const item = foodItems.find(i => i.id === itemId);
+    const quantityInput = document.getElementById(`quantity-${itemId}`);
+    const quantity = parseInt(quantityInput.value, 10);
+  
+    if (isNaN(quantity) || quantity <= 0 || quantity > item.quantity) {
+      alert(`Please enter a valid quantity for ${item.foodName}`);
+      return;
     }
-    
-    // Save the updated cart back to localStorage
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingItem = cart.find(i => i.id === itemId);
+  
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      cart.push({ id: item.id, foodName: item.foodName, quantity });
+    }
+  
+    localStorage.setItem('cart', JSON.stringify(cart));
+    item.quantity -= quantity; // Update the available quantity
+    displayFoodItems(); // Refresh the food list to show updated quantities
   }
+  
+  displayFoodItems();
+  
   
