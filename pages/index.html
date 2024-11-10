@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Food Donation App" />
+  <title>Food Donation</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Main container -->
+  <div id="app">
+    <h1>Welcome to the Food Donation App</h1>
+    <button id="register-btn">Register</button>
+    <button id="login-btn">Login</button>
+  </div>
+
+  <!-- JavaScript files for each page -->
+  <script src="index.js"></script>
+  <script src="App.js"></script>
+  <script src="Donor.js"></script>
+  <script src="Eligibility.js"></script>
+  <script src="Register.js"></script>
+  <script src="Login.js"></script>
+  <script src="Receiver.js"></script>
+  <script src="FoodList.js"></script>
+  <script src="Cart.js"></script>
+
+  <!-- External Script for navigation -->
+  <script>
+    // Adding event listeners to the buttons for navigation
+    document.getElementById('register-btn').addEventListener('click', function() {
+      window.location.href = 'register.html'; // Redirects to register page
+    });
+
+    document.getElementById('login-btn').addEventListener('click', function() {
+      window.location.href = 'login.html'; // Redirects to login page
+    });
+  </script>
+
+</body>
+</html>
