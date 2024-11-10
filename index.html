@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - Food Donation App</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Food Donation App" />
+  <title>Food Donation</title>
+  <link rel="stylesheet" href="App.css" />
 </head>
 <body>
-  <div class="container">
+  <!-- Main container -->
+  <div id="app">
     <h1>Welcome to the Food Donation App</h1>
-    <a href="pages/login.html" class="button">Login</a>
-    <a href="pages/register.html" class="button">Register</a>
+    <button onclick="navigateTo('/register')">Register</button>
+    <button onclick="navigateTo('/login')">Login</button>
   </div>
+
+  <!-- JavaScript files for each page -->
+  <script src="App.js"></script>
+  <script src="js/donor.js"></script>
+  <script src="js/eligibility.js"></script>
+  <script src="js/register.js"></script>
+  <script src="js/login.js"></script>
+  <script src="js/receiver.js"></script>
+  <script src="js/foodList.js"></script>
+  <script src="js/cart.js"></script>
 </body>
 </html>
